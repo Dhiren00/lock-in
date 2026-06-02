@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lock-in</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">◉</span>
+        <h1>Lock-in</h1>
+      </div>
+      <div class="date-badge" id="todayLabel"></div>
+    </header>
+
+    <section class="daily-status card">
+      <h2>Today</h2>
+      <div class="status-row">
+        <span class="status-label">Session started</span>
+        <span class="status-value" id="startedToday">—</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Progress</span>
+        <span class="status-value" id="dailyProgress">0 / 3 segments</span>
+      </div>
+      <div class="history-strip" id="weekHistory" aria-label="Last 7 days"></div>
+      <div class="today-8h-badge" id="today8hBadge">—</div>
+    </section>
+
+    <section class="month-tracker card" aria-labelledby="monthTrackerHeading">
+      <h2 id="monthTrackerHeading">Monthly 8-hour tracking</h2>
+      <p class="month-tracker-intro">Each day counts as complete only when all three segments (2h + 2h + 4h) are finished.</p>
+      <div id="monthTracker"></div>
+    </section>
+
+    <main class="timer-grid">
+      <section class="timer-panel card">
+        <div class="segment-tabs" id="segmentTabs" role="tablist"></div>
+
+        <div class="timer-display">
+          <span class="timer-time" id="timerDisplay">02:00:00</span>
+          <span class="timer-phase" id="phaseLabel">Segment 1 · 2 hours</span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="segmentProgress"></div>
+        </div>
+
+        <div class="controls">
+          <button type="button" class="btn btn-primary" id="btnStart">Start lock-in</button>
+          <button type="button" class="btn btn-secondary" id="btnPause" disabled>Pause</button>
+          <button type="button" class="btn btn-ghost" id="btnBreak" disabled>End segment · Break</button>
+        </div>
+
+        <p class="hint" id="controlHint">Start your 8-hour lock-in. Camera will activate for motion checks.</p>
+      </section>
+
+      <section class="camera-panel card">
+        <h2>Focus cam</h2>
+        <div class="camera-wrap">
+          <video id="cameraFeed" autoplay playsinline muted></video>
+          <canvas id="motionCanvas" class="hidden"></canvas>
+          <div class="camera-overlay" id="cameraOverlay">
+            <span>Camera off</span>
+          </div>
+        </div>
+        <div class="motion-status" id="motionStatus">
+          <span class="motion-dot idle"></span>
+          <span id="motionText">Waiting for session</span>
+        </div>
+        <label class="sensitivity">
+          Motion sensitivity
+          <input type="range" id="motionSensitivity" min="1" max="10" value="5" />
+        </label>
+      </section>
+    </section>
+
+    <section class="schedule card">
+      <h2>Schedule</h2>
+      <ol class="schedule-list">
+        <li data-seg="0"><strong>2h</strong> Deep work <span class="tag" id="seg0tag">pending</span></li>
+        <li class="break-item">Break</li>
+        <li data-seg="1"><strong>2h</strong> Deep work <span class="tag" id="seg1tag">pending</span></li>
+        <li class="break-item">Break</li>
+        <li data-seg="2"><strong>4h</strong> Extended focus <span class="tag" id="seg2tag">pending</span></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="alarm-banner hidden" id="alarmBanner" role="alert">
+    <span id="alarmMessage">Stay seated!</span>
+    <button type="button" class="btn-dismiss" id="dismissAlarm">Dismiss</button>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="storage.js"></script>
+  <script src="camera.js"></script>
+  <script src="timer.js"></script>
+  <script src="month-tracker.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
